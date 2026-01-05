@@ -1,0 +1,428 @@
+<!--
+ PFA Simulator Web - Hub de Desarrollo (app.html)
+ Copyright (c) 2025 Rodrigo A. Figueroa y colaboradores.
+ Propietario. Uso educativo restringido. No redistribuir ni crear derivados sin autorización escrita.
+ Ver LICENSE, TERMS_OF_USE.md y NOTICE.
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PFA Simulator - Hub de Desarrollo</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="codigo-interno/styles.css">
+  <style>
+    /* Ajustes específicos del hub sobre el design system */
+    body { padding: 20px; }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .header .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 5px;
+    }
+    
+    .dev-badge {
+      display: inline-block;
+      background: rgba(255,193,7,0.9);
+      color: #1f2937;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .profile-card { border-top:4px solid transparent; }
+    
+    .profile-card.admin {
+      border-top-color: #dc2626;
+    }
+    
+    .profile-card.instructor {
+      border-top-color: #0891b2;
+    }
+    
+    .profile-card.student {
+      border-top-color: #16a34a;
+    }
+    
+    .profile-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+      margin-bottom: 20px;
+    }
+    
+    .admin .profile-icon {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+    }
+    
+    .instructor .profile-icon {
+      background: linear-gradient(135deg, #0891b2, #0e7490);
+    }
+    
+    .student .profile-icon {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+    }
+    
+    .profile-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .profile-description {
+      color: #6b7280;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+    
+    .profile-features {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+    
+    .profile-features li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+    
+    .profile-features li i {
+      margin-right: 8px;
+      width: 16px;
+      color: #10b981;
+    }
+    
+    .profile-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .btn i {
+      margin-right: 8px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+    
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+    
+    .quick-links {
+      background: rgba(255,255,255,0.95);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .quick-links h3 {
+      margin-bottom: 15px;
+      color: #374151;
+    }
+    
+    .quick-links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+    
+    .quick-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 15px;
+      background: #f9fafb;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #4b5563;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+    
+    .quick-link:hover {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+    
+    .quick-link i {
+      margin-right: 6px;
+    }
+    
+    @media (max-width: 768px) {
+      .profiles-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .profile-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-heartbeat"></i> Simulador PAP-ABCDE&reg; </h1>
+      <p class="subtitle">Simulador de Primeros Auxilios Psicológicos</p>
+      <span class="dev-badge"><i class="fas fa-code"></i> Entorno de Desarrollo</span>
+      <!-- OpenAI API key control moved here for convenience -->
+      <div id="appApiKeyRow" style="margin-top:14px; display:flex; gap:10px; align-items:center; justify-content:center;">
+        <input type="password" id="apiKeyInput" placeholder="sk-... (opcional si usas Demo)" aria-describedby="apiKeyHint" style="padding:8px 10px;border:1px solid #ccc;border-radius:6px;min-width:320px;" />
+        <label style="display:flex;align-items:center;gap:8px;color:#fff;font-weight:600;">
+          <input type="checkbox" id="demoModeToggle" style="transform:scale(1.05);" /> Demo
+        </label>
+        <small id="apiKeyHint" style="display:block;color:#eee;opacity:0.9;margin-left:8px;font-size:12px;">Ingresa tu propia clave para respuestas reales o activa 'Demo' para respuestas simuladas.</small>
+      </div>
+    </div>
+    
+    <div class="profiles-grid">
+      <!-- Perfil Administrador de Sistema -->
+      <div class="profile-card admin">
+        <div class="profile-icon">
+          <i class="fas fa-user-cog"></i>
+        </div>
+        <h2 class="profile-title">Administrador de Sistema</h2>
+        <p class="profile-description">
+          Gestión completa del sistema, configuración de prompts de IA, y administración de contenidos.
+        </p>
+        <ul class="profile-features">
+          <li><i class="fas fa-check"></i> Editor visual de prompts</li>
+          <li><i class="fas fa-check"></i> Configuración de IA</li>
+          <li><i class="fas fa-check"></i> Gestión de contenidos</li>
+          <li><i class="fas fa-check"></i> Herramientas de desarrollo</li>
+        </ul>
+        <div class="profile-actions">
+          <a href="1. Editor de Prompts.html" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Editor de Prompts
+          </a>
+          <a href="INDEX.html" class="btn btn-secondary">
+            <i class="fas fa-folder-open"></i> Explorar Sistema
+          </a>
+        </div>
+      </div>
+      
+      <!-- Perfil Instructor -->
+      <div class="profile-card instructor">
+        <div class="profile-icon">
+          <i class="fas fa-chalkboard-teacher"></i>
+        </div>
+        <h2 class="profile-title">Instructor</h2>
+        <p class="profile-description">
+          Configuración de simulaciones, revisión de casos, y personalización de escenarios de práctica.
+        </p>
+        <ul class="profile-features">
+          <li><i class="fas fa-check"></i> Configuración de casos</li>
+          <li><i class="fas fa-check"></i> Ajuste de dificultad</li>
+          <li><i class="fas fa-check"></i> Revisión de feedback</li>
+          <li><i class="fas fa-check"></i> Gestión de prompts</li>
+        </ul>
+        <div class="profile-actions">
+          <a href="2. PFA - página Web.html?mode=instructor" class="btn btn-primary">
+            <i class="fas fa-play"></i> Configurar Simulación
+          </a>
+          <a href="1. Editor de Prompts.html" class="btn btn-secondary">
+            <i class="fas fa-edit"></i> Editar Prompts
+          </a>
+        </div>
+      </div>
+      
+      <!-- Perfil Alumno -->
+      <div class="profile-card student">
+        <div class="profile-icon">
+          <i class="fas fa-user-graduate"></i>
+        </div>
+        <h2 class="profile-title">Alumno</h2>
+        <p class="profile-description">
+          Práctica inmediata con simulaciones aleatorias de PFA. Inicio automático con casos configurados al azar para máxima variabilidad de aprendizaje.
+        </p>
+        <ul class="profile-features">
+          <li><i class="fas fa-check"></i> Inicio automático de simulación</li>
+          <li><i class="fas fa-check"></i> Configuración completamente aleatoria</li>
+          <li><i class="fas fa-check"></i> Casos variados sin configuración manual</li>
+          <li><i class="fas fa-check"></i> Evaluación y feedback inmediato</li>
+        </ul>
+        <div class="profile-actions">
+          <a href="2. PFA - página Web.html?mode=student&autostart=true&random=true" class="btn btn-primary">
+            <i class="fas fa-play"></i> Iniciar Simulación Aleatoria
+          </a>
+          <a href="test_web.html" class="btn btn-secondary">
+            <i class="fas fa-vial"></i> Modo Prueba
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Enlaces Rápidos -->
+    <div class="quick-links">
+      <h3><i class="fas fa-lightning-bolt"></i> Accesos Rápidos de Desarrollo</h3>
+      <div class="quick-links-grid">
+        <a href="INDEX.html" class="quick-link">
+          <i class="fas fa-home"></i> Página Principal
+        </a>
+        <a href="test_web.html" class="quick-link">
+          <i class="fas fa-flask"></i> Pruebas
+        </a>
+        <a href="404.html" class="quick-link">
+          <i class="fas fa-exclamation-triangle"></i> Error 404
+        </a>
+        <a href="README.md" class="quick-link">
+          <i class="fas fa-book"></i> Documentación
+        </a>
+        <a href="CHANGELOG.md" class="quick-link">
+          <i class="fas fa-list"></i> Changelog
+        </a>
+        <a href="LICENSE" class="quick-link">
+          <i class="fas fa-certificate"></i> Licencia
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Detectar parámetros de URL para mostrar información adicional
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    
+    if (mode) {
+      console.log('Modo detectado:', mode);
+      // Aquí se pueden agregar funcionalidades específicas por modo
+    }
+    
+    // Log para desarrollo
+    console.log('%cPFA Simulator - Hub de Desarrollo', 'background: #667eea; color: white; padding: 8px 12px; border-radius: 4px; font-weight: bold;');
+    console.log('Entorno: Desarrollo | Perfiles disponibles: Admin, Instructor, Alumno');
+    // Enlazado: si el usuario ha ingresado una API key en este hub y hace clic para abrir la página
+    // de simulación, transmitimos ENCADENADA la clave y la preferencia demo en la URL para evitar
+    // problemas de compartición de localStorage entre archivos "file://" en algunos navegadores.
+    (function(){
+      function attachPassthrough() {
+        // Encontrar todos los enlaces que abran la página de simulación
+        const links = document.querySelectorAll('a[href*="2. PFA - página Web.html"]');
+        if(!links.length) return;
+        links.forEach(a => {
+          a.addEventListener('click', function(evt){
+            try {
+              const input = document.getElementById('apiKeyInput');
+              const key = input && input.value.trim() ? input.value.trim() : localStorage.getItem('pfa_api_key');
+              const demo = (document.getElementById('demoModeToggle') && document.getElementById('demoModeToggle').checked) || localStorage.getItem('pfa_demo_mode') === '1';
+              if (key) {
+                // augment URL (preserve existing querystring)
+                const url = new URL(a.href, location.href);
+                url.searchParams.set('pfa_api_key', key);
+                url.searchParams.set('pfa_demo_mode', demo ? '1' : '0');
+                a.href = url.toString();
+            }
+            } catch(e) {
+              console.warn('link passthrough error', e);
+            }
+          });
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attachPassthrough); else attachPassthrough();
+    })();
+  </script>
+  
+  <!-- Sistema de Feedback Universal -->
+  <script src="codigo-interno/feedback-widget-v2.js"></script>
+  <script>
+    // Local helper so entering API key on the hub persists to localStorage for the simulator pages
+    (function(){
+      try {
+        const apiInput = document.getElementById('apiKeyInput');
+        const demoToggle = document.getElementById('demoModeToggle');
+        const hint = document.getElementById('apiKeyHint');
+        if (apiInput) {
+          // Load saved key if present
+          const saved = localStorage.getItem('pfa_api_key');
+          if (saved && saved.startsWith('sk-')) apiInput.value = saved;
+          apiInput.addEventListener('input', (e) => {
+            const v = e.target.value.trim();
+            if (v) localStorage.setItem('pfa_api_key', v);
+            else localStorage.removeItem('pfa_api_key');
+            // visual hint
+            if (hint) hint.textContent = v ? (v.startsWith('sk-') ? 'Clave válida (guardada localmente)' : 'Formato no reconocido — debería comenzar con sk-') : "Ingresa tu propia clave para respuestas reales o activa 'Demo'";
+          });
+        }
+        if (demoToggle) {
+          // reflect state from query or saved preference
+          const url = new URLSearchParams(location.search);
+          const def = url.get('demo') === '1' ? true : false;
+          demoToggle.checked = def;
+          demoToggle.addEventListener('change', e => {
+            // keep a local flag only via URL when opening simulator pages (they read query param/demo flag on load)
+            // We store the preference so 2.PFA page can read it when opened in same browser session
+            try { localStorage.setItem('pfa_demo_mode', e.target.checked ? '1' : '0'); } catch(_){}
+          });
+        }
+      } catch (err) { console.warn('hub api-key helper error', err); }
+    })();
+  </script>
+</body>
+</html>
