@@ -7,7 +7,6 @@
 
   const CONFIG = {
     enabled: true,
-    email: 'rfiguerc@uc.cl',
     githubRepo: 'frenetico55555/pfa_simulator_web',
     reportEndpoint: '',
     version: '1.1'
@@ -67,13 +66,11 @@
 
   function sendToGitHub(type, description, email, context, internalId){ const title = '['+type.toUpperCase()+'] '+description.substring(0,50)+(description.length>50?'...':''); const body = encodeURIComponent(generateGitHubIssueBody(type,description,email,context,internalId)); const labels = type==='bug'?'bug':type==='suggestion'?'enhancement':'comment'; const url = 'https://github.com/'+CONFIG.githubRepo+'/issues/new?title='+encodeURIComponent(title)+'&body='+body+'&labels='+labels; window.open(url,'_blank'); showStatus('✅ Issue creado (nueva pestaña)', 'success'); }
 
-  function sendToEmail(type, description, email, context){ const subject = '[PFA Feedback] '+type+': '+description.substring(0,30); const body = 'Tipo: '+type+'\nDescripcion: '+description+'\nEmail: '+(email||'No proporcionado')+'\n\nContexto:\n'+JSON.stringify(context,null,2); location.href = 'mailto:'+CONFIG.email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body); }
-
   function copyToClipboard(){ const type = document.querySelector('input[name="feedbackType"]:checked')?.value||'general'; const desc = (document.getElementById('pfa-feedback-description')||{}).value||''; const email=(document.getElementById('pfa-feedback-email')||{}).value||''; const ctx = captureContext(); const txt = 'Type: '+type+'\nDescription: '+desc+'\nEmail: '+email+'\n\nContext:\n'+JSON.stringify(ctx,null,2); navigator.clipboard?.writeText(txt).then(()=>showStatus('📋 Copiado','success')).catch(()=>showStatus('❌ Error copiando','error')) }
 
   function showStatus(msg, type){ const el = document.getElementById('pfa-feedback-status'); if(!el) return; const map = { success:{bg:'#dcfce7',border:'#16a34a',color:'#166534'}, error:{bg:'#fee2e2',border:'#dc2626',color:'#991b1b'}, loading:{bg:'#eff6ff',border:'#3b82f6',color:'#1e40af'} }; const s=map[type]||map.loading; el.style.display='block'; el.style.background=s.bg; el.style.border='1px solid '+s.border; el.style.color=s.color; el.textContent=msg; if(type!=='loading') setTimeout(()=>el.style.display='none',4000); }
 
-  function submitFeedback(){ const type = document.querySelector('input[name="feedbackType"]:checked')?.value; const desc = (document.getElementById('pfa-feedback-description')||{}).value?.trim?.() || ''; const email=(document.getElementById('pfa-feedback-email')||{}).value?.trim?.() || ''; if(!type||!desc){ showStatus('Por favor completa tipo y descripción','error'); return; } const ctx = captureContext(); showStatus('📤 Enviando...', 'loading'); const rec = saveInternalRecord({ type, description: desc, email, context: ctx }); sendToGitHub(type, desc, email, ctx, rec?.id); if(email) sendToEmail(type,desc,email,ctx); }
+  function submitFeedback(){ const type = document.querySelector('input[name="feedbackType"]:checked')?.value; const desc = (document.getElementById('pfa-feedback-description')||{}).value?.trim?.() || ''; const email=(document.getElementById('pfa-feedback-email')||{}).value?.trim?.() || ''; if(!type||!desc){ showStatus('Por favor completa tipo y descripción','error'); return; } const ctx = captureContext(); showStatus('📤 Enviando...', 'loading'); const rec = saveInternalRecord({ type, description: desc, email, context: ctx }); sendToGitHub(type, desc, email, ctx, rec?.id); }
 
   function attach(){ document.getElementById('pfa-feedback-btn')?.addEventListener('click', ()=>{ document.getElementById('pfa-feedback-modal').style.display='block'; updateContextPreview(); }); document.getElementById('pfa-feedback-close')?.addEventListener('click', ()=>document.getElementById('pfa-feedback-modal').style.display='none'); document.getElementById('pfa-feedback-modal')?.addEventListener('click', e=>{ if(e.target && e.target.id==='pfa-feedback-modal') document.getElementById('pfa-feedback-modal').style.display='none'; }); document.getElementById('pfa-feedback-submit')?.addEventListener('click', submitFeedback); document.getElementById('pfa-feedback-copy')?.addEventListener('click', copyToClipboard); document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.getElementById('pfa-feedback-modal').style.display='none'; }); }
 
