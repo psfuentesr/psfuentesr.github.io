@@ -7,7 +7,7 @@
 
   const CONFIG = {
     enabled: true,
-    githubRepo: 'frenetico55555/pfa_simulator_web',
+    githubRepo: 'psfuentesr/psfuentesr.github.io',
     reportEndpoint: '',
     version: '1.1'
   };
